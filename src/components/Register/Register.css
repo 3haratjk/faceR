@@ -1,0 +1,66 @@
+.Register{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+}
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 50%;
+    /* border: 2px solid rgb(255, 255, 255); */
+    padding: 1em;
+    border-radius: 2em;
+    background: linear-gradient(to right, rgb(74, 0, 227), rgb(133, 0, 221));
+
+    
+}
+
+.nameInput, .passwordInput, .emailInput{
+    border-radius: 2em;
+    border: none;
+    padding: .7em 1em;
+    margin-bottom: .5em;
+    width: 70%;
+
+}
+
+label{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label p{
+    padding: .5em;
+}
+
+.errorMsg{
+    margin: 0;
+    padding: 0;
+    color: red;
+}
+
+
+.registerBtn{
+    width: 8em;
+    align-self: center;
+    color: rgb(22, 42, 160);
+    background-color: rgb(255, 255, 255);
+    padding: .7em 2em;
+    border: none;
+    border-radius: 2em;
+    margin-top: 1em;
+
+}
+
+@media (max-width: 720px) {
+    .formContainer{
+        width: 95%;
+    }
+}
