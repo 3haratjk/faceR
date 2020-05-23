@@ -8,8 +8,6 @@ import FaceRecognition from './components/faceRecognition/FaceRecognition';
 import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register'
 
-import Clarifai from 'clarifai';
-
 
 const initialState = {
   linkInput : "",
@@ -25,11 +23,6 @@ const initialState = {
 
   }
 };
-
-
-const app = new Clarifai.App({
-  apiKey: '3ec624596217452fa1ef9f3af909f9ef'
- });
 
 class App extends React.Component{
 
@@ -64,31 +57,30 @@ class App extends React.Component{
     })
   }
 
-
   handleChange = (e) => {
     this.setState({
       linkInput : e.target.value
     })
   }
 
-  displayFaceBox = (response) => {
-    const faceXY = response.outputs[0].data.regions[0].region_info.bounding_box;
-    const img = document.getElementById("faceImg");
-    const width = Number(img.width);
-    const height = Number(img.height);
-    const boxXY = {
-      topRow: faceXY.top_row * height,
-      bottomRow: height - (faceXY.bottom_row * height),
-      leftColumn: faceXY.left_col * width,
-      rightColumn: width - (faceXY.right_col * width)
-    };
-
-    this.setState({
-      box: boxXY
-    })
+  displayFaceBox = (data) => {
+    if(data.outputs){
+      const faceXY = data.outputs[0].data.regions[0].region_info.bounding_box;
+      const img = document.getElementById("faceImg");
+      const width = Number(img.width);
+      const height = Number(img.height);
+      const boxXY = {
+        topRow: faceXY.top_row * height,
+        bottomRow: height - (faceXY.bottom_row * height),
+        leftColumn: faceXY.left_col * width,
+        rightColumn: width - (faceXY.right_col * width)
+      };
+  
+      this.setState({
+        box: boxXY
+      })
+    }
   }
-
-
 
   onSubmit = () => {
     this.setState({
@@ -96,12 +88,19 @@ class App extends React.Component{
       linkInput: ""
     })
 
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.linkInput).then(
-    (response) => {
+    fetch('https://glacial-brushlands-04666.herokuapp.com/imageDetect', {
+      method: 'put',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        imageUrl: this.state.linkInput
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
       // do something with response     
-      this.displayFaceBox(response);
+      this.displayFaceBox(data);
 
-      fetch('http://localhost:3001/image', {
+      fetch('https://glacial-brushlands-04666.herokuapp.com/image', {
         method: 'put',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -117,18 +116,12 @@ class App extends React.Component{
             }
           })
         });
-    },
-    function(err) {
-      // there was an error
-      console.log(err)
     }
   );
   }
 
   render(){
-
-
-    
+  
     return(
 
       <div className="App">

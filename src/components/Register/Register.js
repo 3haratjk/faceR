@@ -40,7 +40,7 @@ class Register extends React.Component{
 
     onSubmit = () => {
         if(this.state.name || this.state.email || this.state.password){
-            fetch('http://localhost:3001/register', {
+            fetch('https://glacial-brushlands-04666.herokuapp.com/register', {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
